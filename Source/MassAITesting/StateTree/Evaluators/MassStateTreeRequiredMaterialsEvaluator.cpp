@@ -3,6 +3,7 @@
 
 #include "MassStateTreeRequiredMaterialsEvaluator.h"
 
+#include "MassEntitySubsystem.h"
 #include "MassSmartObjectBehaviorDefinition.h"
 #include "SmartObjectSubsystem.h"
 #include "StateTreeExecutionContext.h"
@@ -21,6 +22,7 @@ void FMassStateTreeRequiredMaterialsEvaluator::Evaluate(FStateTreeExecutionConte
 	
 	FRTSAgentFragment& RTSAgent = Context.GetExternalData(RTSAgentHandle);
 	UMassEntitySubsystem& EntitySubsystem = Context.GetExternalData(EntitySubsystemHandle);
+	FMassEntityManager& EntityManager = EntitySubsystem.GetMutableEntityManager();
 	URTSBuildingSubsystem& BuildingSubsystem = Context.GetExternalData(BuildingSubsystemHandle);
 	const FVector& Location = Context.GetExternalData(TransformHandle).GetTransform().GetLocation();
 	
@@ -45,13 +47,13 @@ void FMassStateTreeRequiredMaterialsEvaluator::Evaluate(FStateTreeExecutionConte
 	// - AgentState: Chopping Resources/Gathering Item/Building Floor
 
 	// We are currently gathering resources
-	if (!EntitySubsystem.IsEntityValid(EntityHandle) && RTSAgent.QueuedItems.Num() > 0)
+	if (!EntityManager.IsEntityValid(EntityHandle) && RTSAgent.QueuedItems.Num() > 0)
 	{
 		EntityHandle = RTSAgent.QueuedItems.Pop();
-		if (EntitySubsystem.IsEntityValid(EntityHandle))
+		if (EntityManager.IsEntityValid(EntityHandle))
 		{
 			bFoundItemHandle = true;
-			FItemFragment* ItemFragment = EntitySubsystem.GetFragmentDataPtr<FItemFragment>(EntityHandle);
+			FItemFragment* ItemFragment = EntityManager.GetFragmentDataPtr<FItemFragment>(EntityHandle);
 			if (ItemFragment)
 			{
 				ItemFragment->bClaimed = true;
@@ -85,7 +87,7 @@ void FMassStateTreeRequiredMaterialsEvaluator::Evaluate(FStateTreeExecutionConte
 					// We need to claim both because then its possible that another agent also 'wants' the item on the ground
 					for(const FMassEntityHandle& Item : ItemHandles)
 					{
-						if (FItemFragment* ItemFragment = EntitySubsystem.GetFragmentDataPtr<FItemFragment>(Item))
+						if (FItemFragment* ItemFragment = EntityManager.GetFragmentDataPtr<FItemFragment>(Item))
 						{
 							ItemFragment->bClaimed = true;
 						}

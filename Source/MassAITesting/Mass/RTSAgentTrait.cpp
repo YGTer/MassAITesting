@@ -10,6 +10,7 @@
 #include "SmartObjectSubsystem.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "AnimToTextureInstancePlaybackHelpers.h"
+#include "MassEntitySubsystem.h"
 #include "MassAITesting/RTSBuildingSubsystem.h"
 
 //----------------------------------------------------------------------//
@@ -63,12 +64,13 @@ void URTSAgentTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext
 {
 	UMassEntitySubsystem* EntitySubsystem = UWorld::GetSubsystem<UMassEntitySubsystem>(&World);
 	check(EntitySubsystem);
-	
+
+	FMassEntityManager& EntityManager = EntitySubsystem->GetMutableEntityManager();
 	BuildContext.AddFragment<FRTSAgentFragment>();
 	BuildContext.AddFragment<FRTSAnimationFragment>();
 	BuildContext.AddTag<FRTSAgent>();
 	
-	const FConstSharedStruct RTSAgentFragment = EntitySubsystem->GetOrCreateConstSharedFragment(UE::StructUtils::GetStructCrc32(FConstStructView::Make(AgentParameters)), AgentParameters);
+	const FConstSharedStruct RTSAgentFragment = EntityManager.GetOrCreateConstSharedFragmentByHash(UE::StructUtils::GetStructCrc32(FConstStructView::Make(AgentParameters)), AgentParameters);
 	BuildContext.AddConstSharedFragment(RTSAgentFragment);
 }
 
@@ -81,9 +83,9 @@ URTSAgentInitializer::URTSAgentInitializer()
 	Operation = EMassObservedOperation::Add;
 }
 
-void URTSAgentInitializer::Execute(UMassEntitySubsystem& EntitySubsystem, FMassExecutionContext& Context)
+void URTSAgentInitializer::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
-	EntityQuery.ParallelForEachEntityChunk(EntitySubsystem, Context, ([this](FMassExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(EntityManager, Context, ([this](FMassExecutionContext& Context)
 	{
 		const TArrayView<FRTSAgentFragment> RTSMoveFragmentList = Context.GetMutableFragmentView<FRTSAgentFragment>();
 		const FRTSAgentParameters& RTSAgentParameters = Context.GetConstSharedFragment<FRTSAgentParameters>();
@@ -158,9 +160,9 @@ void URTSAnimationProcessor::ConfigureQueries()
 	EntityQuery.SetChunkFilter(&FMassVisualizationChunkFragment::AreAnyEntitiesVisibleInChunk);
 }
 
-void URTSAnimationProcessor::Execute(UMassEntitySubsystem& EntitySubsystem, FMassExecutionContext& Context)
+void URTSAnimationProcessor::Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context)
 {
-	EntityQuery.ParallelForEachEntityChunk(EntitySubsystem, Context, [this](FMassExecutionContext& Context)
+	EntityQuery.ForEachEntityChunk(EntityManager, Context, [this](FMassExecutionContext& Context)
 	{
 		TConstArrayView<FMassMoveTargetFragment> MoveFragments = Context.GetFragmentView<FMassMoveTargetFragment>();
 		TConstArrayView<FMassVelocityFragment> VelocityFragments = Context.GetFragmentView<FMassVelocityFragment>();

@@ -4,6 +4,7 @@
 #include "MassStateTreeMoveToEntityHandle.h"
 
 #include "MassCommandBuffer.h"
+#include "MassEntitySubsystem.h"
 #include "MassMovementFragments.h"
 #include "MassSignalSubsystem.h"
 #include "MassSmartObjectFragments.h"
@@ -34,11 +35,12 @@ EStateTreeRunStatus FMassStateTreeMoveToEntityHandle::EnterState(FStateTreeExecu
 	const FMassMovementParameters& MoveParameters = Context.GetExternalData(MoveParametersHandle);
 	const FMassEntityHandle& ItemHandle = Context.GetInstanceData(EntityHandle);
 	UMassEntitySubsystem& EntitySubsystem = Context.GetExternalData(EntitySubsystemHandle);
+	FMassEntityManager& EntityManager = EntitySubsystem.GetMutableEntityManager();
 
-	if (!EntitySubsystem.IsEntityValid(ItemHandle))
+	if (!EntityManager.IsEntityValid(ItemHandle))
 		return EStateTreeRunStatus::Failed;
 
-	const FVector& Location = EntitySubsystem.GetFragmentDataChecked<FTransformFragment>(ItemHandle).GetTransform().GetLocation();
+	const FVector& Location = EntityManager.GetFragmentDataChecked<FTransformFragment>(ItemHandle).GetTransform().GetLocation();
 	
 	MoveTarget.Center = Location;
 	MoveTarget.SlackRadius = 100.f;

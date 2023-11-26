@@ -153,7 +153,7 @@ class MASSAITESTING_API URTSAgentInitializer : public UMassObserverProcessor
 
 	URTSAgentInitializer();
 	
-	virtual void Execute(UMassEntitySubsystem& EntitySubsystem, FMassExecutionContext& Context) override;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
 	virtual void ConfigureQueries() override;
 	virtual void Initialize(UObject& Owner) override;
 
@@ -175,7 +175,7 @@ class URTSAnimationProcessor : public UMassProcessor
 
 	virtual void Initialize(UObject& Owner) override;
 	virtual void ConfigureQueries() override;
-	virtual void Execute(UMassEntitySubsystem& EntitySubsystem, FMassExecutionContext& Context) override;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
 	void UpdateISMVertexAnimation(FMassInstancedStaticMeshInfo& ISMInfo, FRTSAnimationFragment& AnimationData,
 	                              float LODSignificance, float PrevLODSignificance, int32 NumFloatsToPad);
 

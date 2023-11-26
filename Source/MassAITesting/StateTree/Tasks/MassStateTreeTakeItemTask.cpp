@@ -3,6 +3,7 @@
 
 #include "MassStateTreeTakeItemTask.h"
 
+#include "MassEntitySubsystem.h"
 #include "MassAITesting/RTSBuildingSubsystem.h"
 #include "MassAITesting/Mass/RTSItemTrait.h"
 
@@ -20,13 +21,14 @@ EStateTreeRunStatus FMassStateTreeTakeItemTask::EnterState(FStateTreeExecutionCo
 {
 	const FMassEntityHandle& ItemHandle = Context.GetInstanceData(EntityHandle);
 	UMassEntitySubsystem& EntitySubsystem = Context.GetExternalData(EntitySubsystemHandle);
+	FMassEntityManager& EntityManager = EntitySubsystem.GetMutableEntityManager();
 	URTSBuildingSubsystem& BuildingSubsystem = Context.GetExternalData(BuildingSubsystemHandle);
 	
-	if (EntitySubsystem.IsEntityValid(ItemHandle))
+	if (EntityManager.IsEntityValid(ItemHandle))
 	{
-		const FItemFragment* Item = EntitySubsystem.GetFragmentDataPtr<FItemFragment>(ItemHandle);
+		const FItemFragment* Item = EntityManager.GetFragmentDataPtr<FItemFragment>(ItemHandle);
 		BuildingSubsystem.ItemHashGrid.Remove(ItemHandle, Item->CellLoc);
-		EntitySubsystem.Defer().DestroyEntity(ItemHandle);
+		EntityManager.Defer().DestroyEntity(ItemHandle);
 		return EStateTreeRunStatus::Succeeded;
 	}
 	return EStateTreeRunStatus::Failed;
