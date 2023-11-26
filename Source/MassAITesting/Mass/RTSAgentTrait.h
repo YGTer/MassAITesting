@@ -137,7 +137,7 @@ class MASSAITESTING_API URTSAgentTrait : public UMassEntityTraitBase
 {
 	GENERATED_BODY()
 
-	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 
 	UPROPERTY(EditAnywhere)
 	FRTSAgentParameters AgentParameters;

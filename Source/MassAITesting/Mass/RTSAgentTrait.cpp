@@ -60,7 +60,7 @@ void URTSGatherResourceProcessor::Initialize(UObject& Owner)
 //----------------------------------------------------------------------//
 // URTSAgentTrait
 //----------------------------------------------------------------------//
-void URTSAgentTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, UWorld& World) const
+void URTSAgentTrait::BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const
 {
 	UMassEntitySubsystem* EntitySubsystem = UWorld::GetSubsystem<UMassEntitySubsystem>(&World);
 	check(EntitySubsystem);
