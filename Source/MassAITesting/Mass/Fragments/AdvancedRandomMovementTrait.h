@@ -22,7 +22,7 @@ class MASSAITESTING_API UAdvancedRandomMovementTrait : public UMassEntityTraitBa
 {
 	GENERATED_BODY()
 
-	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, UWorld& World) const override;
+	virtual void BuildTemplate(FMassEntityTemplateBuildContext& BuildContext, const UWorld& World) const override;
 };
 
 UCLASS()
@@ -32,7 +32,7 @@ class MASSAITESTING_API UAdvancedRandomMovementProcessor : public UMassProcessor
 
 	UAdvancedRandomMovementProcessor();
 	
-	virtual void Execute(UMassEntitySubsystem& EntitySubsystem, FMassExecutionContext& Context) override;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
 	virtual void ConfigureQueries() override;
 
 	FMassEntityQuery EntityQuery;

@@ -20,7 +20,7 @@ bool FMassStateTreeClaimSmartObjectTaskPlus::Link(FStateTreeLinker& Linker)
 }
 
 EStateTreeRunStatus FMassStateTreeClaimSmartObjectTaskPlus::EnterState(FStateTreeExecutionContext& Context,
-	const EStateTreeStateChangeType ChangeType, const FStateTreeTransitionResult& Transition) const
+	const FStateTreeTransitionResult& Transition) const
 {
 	const FSmartObjectHandle& SOHandle = Context.GetInstanceData(SmartObjectHandle);
 	EMassSmartObjectClaimResult& ClaimResult = Context.GetInstanceData(ClaimResultHandle);
@@ -37,9 +37,9 @@ EStateTreeRunStatus FMassStateTreeClaimSmartObjectTaskPlus::EnterState(FStateTre
 
 	if (!ClaimHandle.IsValid())
 		return EStateTreeRunStatus::Failed;
-	SOUser.ClaimHandle = ClaimHandle;
+	SOUser.InteractionHandle = ClaimHandle;
 	SOUser.InteractionStatus = EMassSmartObjectInteractionStatus::Unset;
-	const FTransform Transform = SmartObjectSubsystem.GetSlotTransform(SOUser.ClaimHandle).Get(FTransform::Identity);
+	const FTransform Transform = SmartObjectSubsystem.GetSlotTransform(SOUser.InteractionHandle).Get(FTransform::Identity);
 	SOUser.TargetLocation = Transform.GetLocation();
 	SOUser.TargetDirection = Transform.GetRotation().Vector();
 

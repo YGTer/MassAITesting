@@ -55,7 +55,7 @@ class MASSAITESTING_API URTSGatherResourceProcessor : public UMassProcessor
 {
 	GENERATED_BODY()
 public:
-	virtual void Execute(UMassEntitySubsystem& EntitySubsystem, FMassExecutionContext& Context) override;
+	virtual void Execute(FMassEntityManager& EntityManager, FMassExecutionContext& Context) override;
 	virtual void ConfigureQueries() override;
 	virtual void Initialize(UObject& Owner) override;
 

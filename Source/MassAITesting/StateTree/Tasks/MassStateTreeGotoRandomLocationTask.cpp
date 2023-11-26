@@ -17,7 +17,7 @@ bool FMassStateTreeGotoRandomLocationTask::Link(FStateTreeLinker& Linker)
 }
 
 EStateTreeRunStatus FMassStateTreeGotoRandomLocationTask::EnterState(FStateTreeExecutionContext& Context,
-	const EStateTreeStateChangeType ChangeType, const FStateTreeTransitionResult& Transition) const
+	const FStateTreeTransitionResult& Transition) const
 {
 	FMassMoveTargetFragment& MoveTargetFragment = Context.GetExternalData(MoveTargetHandle);
 	const FTransform& Transform = Context.GetExternalData(TransformHandle).GetTransform();

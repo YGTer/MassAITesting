@@ -35,7 +35,7 @@ struct MASSAITESTING_API FMassStateTreeClaimSmartObjectTaskPlus : public FMassSt
 
 	virtual bool Link(FStateTreeLinker& Linker) override;
     virtual const UStruct* GetInstanceDataType() const override { return FMassStateTreeClaimSmartObjectTaskInstanceData::StaticStruct(); }
-    virtual EStateTreeRunStatus EnterState(FStateTreeExecutionContext& Context, const EStateTreeStateChangeType ChangeType, const FStateTreeTransitionResult& Transition) const override;
+    virtual EStateTreeRunStatus EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const override;
 
 	TStateTreeInstanceDataPropertyHandle<FSmartObjectHandle> SmartObjectHandle;
 	TStateTreeInstanceDataPropertyHandle<EMassSmartObjectClaimResult> ClaimResultHandle;

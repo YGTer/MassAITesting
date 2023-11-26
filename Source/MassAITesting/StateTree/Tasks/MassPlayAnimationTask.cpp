@@ -19,7 +19,7 @@ bool FMassPlayAnimationTask::Link(FStateTreeLinker& Linker)
 }
 
 EStateTreeRunStatus FMassPlayAnimationTask::EnterState(FStateTreeExecutionContext& Context,
-	const EStateTreeStateChangeType ChangeType, const FStateTreeTransitionResult& Transition) const
+	const FStateTreeTransitionResult& Transition) const
 {
 	// Update MoveTarget location
 	const FMassStateTreeExecutionContext& MassContext = static_cast<FMassStateTreeExecutionContext&>(Context);

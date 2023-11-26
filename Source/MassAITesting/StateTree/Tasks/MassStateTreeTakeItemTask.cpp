@@ -16,7 +16,7 @@ bool FMassStateTreeTakeItemTask::Link(FStateTreeLinker& Linker)
 }
 
 EStateTreeRunStatus FMassStateTreeTakeItemTask::EnterState(FStateTreeExecutionContext& Context,
-	const EStateTreeStateChangeType ChangeType, const FStateTreeTransitionResult& Transition) const
+	const FStateTreeTransitionResult& Transition) const
 {
 	const FMassEntityHandle& ItemHandle = Context.GetInstanceData(EntityHandle);
 	UMassEntitySubsystem& EntitySubsystem = Context.GetExternalData(EntitySubsystemHandle);

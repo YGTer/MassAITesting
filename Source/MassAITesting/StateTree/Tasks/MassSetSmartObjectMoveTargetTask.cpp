@@ -20,7 +20,7 @@ bool FMassSetSmartObjectMoveTargetTask::Link(FStateTreeLinker& Linker)
 }
 
 EStateTreeRunStatus FMassSetSmartObjectMoveTargetTask::EnterState(FStateTreeExecutionContext& Context,
-	const EStateTreeStateChangeType ChangeType, const FStateTreeTransitionResult& Transition) const
+	const FStateTreeTransitionResult& Transition) const
 {
 	// Update MoveTarget location
 	//const FMassStateTreeExecutionContext& MassContext = static_cast<FMassStateTreeExecutionContext&>(Context);

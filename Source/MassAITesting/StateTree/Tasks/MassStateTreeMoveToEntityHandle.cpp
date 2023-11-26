@@ -28,7 +28,7 @@ bool FMassStateTreeMoveToEntityHandle::Link(FStateTreeLinker& Linker)
 }
 
 EStateTreeRunStatus FMassStateTreeMoveToEntityHandle::EnterState(FStateTreeExecutionContext& Context,
-                                                                 const EStateTreeStateChangeType ChangeType, const FStateTreeTransitionResult& Transition) const
+      const FStateTreeTransitionResult& Transition) const
 {
 	FMassMoveTargetFragment& MoveTarget = Context.GetExternalData(MoveTargetHandle);
 	const FMassMovementParameters& MoveParameters = Context.GetExternalData(MoveParametersHandle);
