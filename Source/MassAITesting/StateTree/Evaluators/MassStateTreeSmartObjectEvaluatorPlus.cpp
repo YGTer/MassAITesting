@@ -17,43 +17,32 @@ bool FMassStateTreeSmartObjectEvaluatorPlus::Link(FStateTreeLinker& Linker)
 	Linker.LinkExternalData(SmartObjectUserHandle);
 	Linker.LinkExternalData(RTSAgentHandle);
 
-	Linker.LinkInstanceDataProperty(SmartObjectHandle, STATETREE_INSTANCEDATA_PROPERTY(FMassStateTreeSmartObjectEvaluatorPlusInstanceData, SOHandle));
-	Linker.LinkInstanceDataProperty(CandidatesFoundHandle, STATETREE_INSTANCEDATA_PROPERTY(FMassStateTreeSmartObjectEvaluatorPlusInstanceData, bCandidatesFound));
-	Linker.LinkInstanceDataProperty(RangeHandle, STATETREE_INSTANCEDATA_PROPERTY(FMassStateTreeSmartObjectEvaluatorPlusInstanceData, Range));
-	Linker.LinkInstanceDataProperty(SmartObjectHandle, STATETREE_INSTANCEDATA_PROPERTY(FMassStateTreeSmartObjectEvaluatorPlusInstanceData, SOHandle));
-
 	return true;
 }
 
-void FMassStateTreeSmartObjectEvaluatorPlus::ExitState(FStateTreeExecutionContext& Context,
-	const EStateTreeStateChangeType ChangeType, const FStateTreeTransitionResult& Transition) const
+void FMassStateTreeSmartObjectEvaluatorPlus::TreeStop(FStateTreeExecutionContext& Context) const
 {
-	if (ChangeType != EStateTreeStateChangeType::Changed)
-	{
-		return;
-	}
-
 	Reset(Context);
 }
 
-void FMassStateTreeSmartObjectEvaluatorPlus::Evaluate(FStateTreeExecutionContext& Context,
-	const EStateTreeEvaluationType EvalType, const float DeltaTime) const
+void FMassStateTreeSmartObjectEvaluatorPlus::Tick(FStateTreeExecutionContext& Context, const float DeltaTime) const
 {
 	USmartObjectSubsystem& SmartObjectSubsystem = Context.GetExternalData(SmartObjectSubsystemHandle);
 	FTransformFragment& TransformFragment = Context.GetExternalData(EntityTransformHandle);
 	UMassSignalSubsystem& SignalSubsystem = Context.GetExternalData(MassSignalSubsystemHandle);
 	FMassSmartObjectUserFragment& SOUser = Context.GetExternalData(SmartObjectUserHandle);
 	FRTSAgentFragment& RTSAgent = Context.GetExternalData(RTSAgentHandle);
+	FMassStateTreeSmartObjectEvaluatorPlusInstanceData MyDataRef = Context.GetInstanceData<FMassStateTreeSmartObjectEvaluatorPlusInstanceData>(*this);
 
-	FMassSmartObjectRequestResult& RequestResult = Context.GetInstanceData(SearchRequestResultHandle);
-	FSmartObjectRequestFilter& Filter = Context.GetInstanceData(FilterHandle);
-	FSmartObjectHandle& SOHandle = Context.GetInstanceData(SmartObjectHandle);
-	bool& CandidatesFound = Context.GetInstanceData(CandidatesFoundHandle);
-	float& Range = Context.GetInstanceData(RangeHandle);
+	FMassSmartObjectRequestResult& RequestResult = MyDataRef.SearchRequestResult;
+	FSmartObjectRequestFilter& Filter = MyDataRef.Filter;
+	FSmartObjectHandle& SOHandle = MyDataRef.SOHandle;
+	bool& CandidatesFound = MyDataRef.bCandidatesFound;
+	float& Range = MyDataRef.Range;
 
 	const FTransform& Transform = TransformFragment.GetTransform();
 
-	bool bClaimed = SOUser.ClaimHandle.IsValid();
+	bool bClaimed = SOUser.InteractionHandle.IsValid();
 
 	// We are returning to our claimed floor home, we dont need to perform any searching.
 	FGameplayTagQueryExpression Expression;

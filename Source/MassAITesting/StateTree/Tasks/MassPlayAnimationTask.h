@@ -8,6 +8,8 @@
 #include "MassSmartObjectFragments.h"
 #include "MassStateTreeMoveToEntityHandle.h"
 #include "MassStateTreeTypes.h"
+#include "StateTreeInstanceData.h"
+#include "StateTreeLinker.h"
 #include "MassAITesting/Mass/RTSAgentTrait.h"
 #include "MassPlayAnimationTask.generated.h"
 
@@ -49,8 +51,4 @@ protected:
 	TStateTreeExternalDataHandle<FMassMoveTargetFragment> MoveTargetHandle;
 	TStateTreeExternalDataHandle<UMassSignalSubsystem> MassSignalSubsystemHandle;
 	TStateTreeExternalDataHandle<FRTSAnimationFragment> AnimationHandle;
-
-	TStateTreeInstanceDataPropertyHandle<float> TimeHandle;
-	TStateTreeInstanceDataPropertyHandle<float> DurationHandle;
-	TStateTreeInstanceDataPropertyHandle<int32> AnimationIndexHandle;
 };

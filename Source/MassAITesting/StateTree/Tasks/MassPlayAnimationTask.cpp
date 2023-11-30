@@ -11,9 +11,6 @@ bool FMassPlayAnimationTask::Link(FStateTreeLinker& Linker)
 	Linker.LinkExternalData(MoveTargetHandle);
 	Linker.LinkExternalData(MassSignalSubsystemHandle);
 	Linker.LinkExternalData(AnimationHandle);
-	Linker.LinkInstanceDataProperty(DurationHandle, STATETREE_INSTANCEDATA_PROPERTY(FMassPlayAnimationTaskInstanceData, Duration));
-	Linker.LinkInstanceDataProperty(TimeHandle, STATETREE_INSTANCEDATA_PROPERTY(FMassPlayAnimationTaskInstanceData, Time));
-	Linker.LinkInstanceDataProperty(AnimationIndexHandle, STATETREE_INSTANCEDATA_PROPERTY(FMassPlayAnimationTaskInstanceData, AnimationIndex));
 	
 	return true;
 }
@@ -25,16 +22,17 @@ EStateTreeRunStatus FMassPlayAnimationTask::EnterState(FStateTreeExecutionContex
 	const FMassStateTreeExecutionContext& MassContext = static_cast<FMassStateTreeExecutionContext&>(Context);
 	FMassMoveTargetFragment& MoveTarget = Context.GetExternalData(MoveTargetHandle);
 	FRTSAnimationFragment& AnimationFragment = Context.GetExternalData(AnimationHandle);
+	FMassPlayAnimationTaskInstanceData MyDataRef = Context.GetInstanceData<FMassPlayAnimationTaskInstanceData>(*this);
 
-	float& Time = Context.GetInstanceData(TimeHandle);
+	float& Time = MyDataRef.Time;
 	Time = 0;
 
 	AnimationFragment.bCustomAnimation = true;
 	AnimationFragment.AnimPosition = 0;
-	AnimationFragment.AnimationStateIndex = Context.GetInstanceData(AnimationIndexHandle);
+	AnimationFragment.AnimationStateIndex = MyDataRef.AnimationIndex;
 	MoveTarget.CreateNewAction(EMassMovementAction::Animate, *Context.GetWorld());
 
-	const float Duration = Context.GetInstanceData(DurationHandle);
+	const float Duration = MyDataRef.Duration;
 	if (Duration > 0.0f)
 	{
 		UMassSignalSubsystem& MassSignalSubsystem = MassContext.GetExternalData(MassSignalSubsystemHandle);
@@ -50,9 +48,10 @@ EStateTreeRunStatus FMassPlayAnimationTask::Tick(FStateTreeExecutionContext& Con
 	// When entity reaches target, mark as complete
 	const FMassMoveTargetFragment& MoveTarget = Context.GetExternalData(MoveTargetHandle);
 	FRTSAnimationFragment& AnimationFragment = Context.GetExternalData(AnimationHandle);
+	FMassPlayAnimationTaskInstanceData MyDataRef = Context.GetInstanceData<FMassPlayAnimationTaskInstanceData>(*this);
 
-	float& Time = Context.GetInstanceData(TimeHandle);
-	const float Duration = Context.GetInstanceData(DurationHandle);
+	float& Time = MyDataRef.Time;
+	const float Duration = MyDataRef.Duration;
 	
 	Time += DeltaTime;
 
